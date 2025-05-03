@@ -57,6 +57,7 @@ ENV BOUTPP_CONFIG_OVERRIDE=/hermes_project/work/boutpp_config.cmake
 
 # Copy in required files for a minimal build of Hermes-3 and BOUT++
 COPY . ${HERMES_SRC_DIR}
+RUN git submodule update --init --recursive
 
 COPY docker/image_ingredients/enable_c.patch ${BOUTPP_SRC_DIR}/enable_c.patch
 RUN git -C ${BOUTPP_SRC_DIR} apply ./enable_c.patch

@@ -1,5 +1,5 @@
-# Build as "hermes3-jupyter"
-# with sudo docker build -f docker/Jupyter.dockerfile -t hermes3-jupyter docker
+# Build as "hermes-3-jupyter"
+# with sudo docker build -f docker/Jupyter.dockerfile -t hermes-3-jupyter docker
 
 FROM jupyter/scipy-notebook
 

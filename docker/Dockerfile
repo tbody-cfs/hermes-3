@@ -1,5 +1,5 @@
-# Build as "hermes3"
-# with sudo docker build -f docker/Dockerfile -t hermes3 docker
+# Build as "hermes-3"
+# with sudo docker build -f docker/Dockerfile -t hermes-3 docker
 
 # Use a spack image with a pinned SHA
 FROM spack/ubuntu-jammy@sha256:d9acf9ed998cbde8d12bd302c5921291086bfe6f70d2d0e26908fdc48c272324 AS builder

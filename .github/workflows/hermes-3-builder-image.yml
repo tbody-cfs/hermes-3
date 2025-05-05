@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: boutproject/hermes-3-builder # Call the image hermes-3-builder
+  IMAGE_NAME: tbody-cfs/hermes-3-builder # Call the image hermes-3-builder
 
 jobs:
   build:

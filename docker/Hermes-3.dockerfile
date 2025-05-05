@@ -1,27 +1,10 @@
-# Build as "hermes3"
-# with sudo docker build -f docker/Dockerfile -t hermes3 docker
+# Build as "hermes-3"
+# with sudo docker build -f docker/Hermes-3.dockerfile -t hermes-3 docker
 
-# Use a spack image with a pinned SHA
-FROM spack/ubuntu-jammy@sha256:d9acf9ed998cbde8d12bd302c5921291086bfe6f70d2d0e26908fdc48c272324 AS builder
+# Load the hermes-3-builder image
+FROM ghcr.io/boutproject/hermes-3-builder AS builder
 
-# Install OS packages needed to build the software
-RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install --no-install-recommends git build-essential vim cmake \
- && rm -rf /var/lib/apt/lists/*
-
-# What we want to install and how we want to install it
-# is specified in a manifest file (spack.yaml)
-RUN mkdir -p /opt/spack-environment
-COPY docker/image_ingredients/docker_spack.yaml /opt/spack-environment/spack.yaml
-
-# Install the software
-WORKDIR /opt/spack-environment
-RUN spack env activate . && spack install --fail-fast && spack gc -y
-
-# Make an 'entrypoint.sh' script which activates the spack environment
-RUN spack env activate --sh -d . > activate.sh
-
-# Bare OS image to run the installed executables
+# Make a bare image for building hermes-3
 FROM ubuntu:22.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
@@ -57,6 +40,8 @@ ENV BOUTPP_CONFIG_OVERRIDE=/hermes_project/work/boutpp_config.cmake
 
 # Copy in required files for a minimal build of Hermes-3 and BOUT++
 COPY . ${HERMES_SRC_DIR}
+# Initialize the git submodules (needed for CI/CD build)
+RUN git -C ${HERMES_SRC_DIR} submodule update --init --recursive
 
 COPY docker/image_ingredients/enable_c.patch ${BOUTPP_SRC_DIR}/enable_c.patch
 RUN git -C ${BOUTPP_SRC_DIR} apply ./enable_c.patch

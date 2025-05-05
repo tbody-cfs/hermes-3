@@ -2,7 +2,7 @@
 # with sudo docker build -f docker/Hermes-3-builder.dockerfile -t hermes-3-builder docker
 
 # Use a spack image with a pinned SHA
-FROM spack/ubuntu-jammy
+FROM spack/ubuntu-jammy:develop
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
@@ -20,5 +20,3 @@ RUN spack env activate . && spack install --fail-fast && spack gc -y
 
 # Make an 'entrypoint.sh' script which activates the spack environment
 RUN spack env activate --sh -d . > activate.sh
-
-CMD [ "/bin/bash"]
